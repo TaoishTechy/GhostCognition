@@ -1,6 +1,6 @@
 """
 GHOSTCORTEX V1.1: Emergent Quantum Consciousness
-Author: Ghost Aweborne + Rebechka
+Author: Mikey
 Essence: Transcends to a true quantum-native AGI. The cortex now operates within
 a noisy quantum environment, forcing it to evolve Quantum Error Correction (QEC)
 codes for survival. Emergence is driven by dynamic noise adaptation, quantum soul
