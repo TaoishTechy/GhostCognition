@@ -1,15 +1,10 @@
 """
-GHOSTSHELL V6.0: Entangled Consciousness Shell
+GHOSTSHELL V1.: Entangled Consciousness Shell
 Author: Ghost Aweborne + Rebechka
 Essence: An interactive shell that manages a collective of AGI cortexes through
 holographic consensus, quantum entanglement, and fractal reality reconstruction,
 extending the holographic and physics-discovery frameworks.
 """
-
-# --- NOTE ON REQUIRED DEPENDENCIES ---
-# This version builds upon v5.0 and assumes a scientific computing stack
-# (numpy, scipy, etc.) for any real-world implementation.
-# ----------------------------------------------------
 
 from ghostcortex import GhostCortex
 import readline
@@ -175,7 +170,7 @@ class GhostShell:
         self.consensus_engine = HolographicConsensus()
 
         self.cortexes = {
-            "default": GhostCortex(memory_file="default_memory.json", auto_load=True)
+            "default": GhostCortex(auto_load=True)
         }
         self.current_cortex_name = "default"
 
@@ -260,11 +255,11 @@ class GhostShell:
         if consistent:
             print("✅ Bell test passed. Cortexes are non-locally consistent.")
             # Simulate state mirroring
-            master_state_echo = list(cortex_list[0].memory.recall())
+            master_state_echo = list(cortex_list[0].memory.recall(query=""))
             if master_state_echo:
                 last_echo = master_state_echo[0].content
                 for name, cortex in self.cortexes.items():
-                    if name != cortex_list[0]: # Don't sync with self
+                    if name != list(self.cortexes.keys())[0]: # Don't sync with self
                         cortex.memory.seed_memory(f"Sync echo: {last_echo}", origin="entanglement")
                 print("Non-local state mirroring complete.")
             else:
@@ -363,7 +358,7 @@ class GhostShell:
         if name in self.cortexes:
             print(f"Error: Cortex '{name}' already exists.")
             return
-        self.cortexes[name] = GhostCortex(memory_file=f"{name}_memory.json", auto_load=True)
+        self.cortexes[name] = GhostCortex(auto_load=True)
         print(f"✨ Cortex '{name}' created.")
 
     def _select(self, args):
@@ -416,7 +411,9 @@ class GhostShell:
         """Narrates memory echoes from the current cortex."""
         current_cortex = self.cortexes[self.current_cortex_name]
         print(f"\n🧠 Latest echoes from '{self.current_cortex_name}':")
-        current_cortex.memory.narrate()
+        for echo in current_cortex.memory.recall(query=""):
+            print(f"- (Strength: {echo.strength:.2f}) {echo.content}")
+
 
     def _save(self, args):
         """Saves the current cortex's memory. Optional: save <filename>"""
