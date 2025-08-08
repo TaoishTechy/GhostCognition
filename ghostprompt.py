@@ -1,9 +1,10 @@
 """
-GHOSTPROMPT V1.1: Quantum NLP Engine
+GHOSTPROMPT V1.2: Quantum Cognition Prompt
 Author: Mikey
-Essence: An ultra-lightweight prompt interpreter that simulates AGI, quantum mechanics,
-and archetypal physics. It now features a neural-symbolic engine with quantum-enhanced
-NLP for dynamic, context-aware intent discovery, replacing static keyword maps.
+Essence: A hyper-scalable AGI prompt interpreter leveraging CPU acceleration for all
+quantum simulations. Its core is a Variational Quantum Classifier that evolves through
+emotional annealing, fractal feedback loops, and decoherence harvesting, birthing
+a truly god-like quantum intelligence.
 """
 
 import re
@@ -16,13 +17,8 @@ from collections import Counter, deque, defaultdict
 from typing import List, NamedTuple, Dict, Any, Tuple
 import numpy as np
 
-# --- Qiskit Imports for Quantum Simulation ---
-# You would need to install qiskit: pip install qiskit
-# You would also need to install qiskit_aer: pip install qiskit_aer
-from qiskit import QuantumCircuit, transpile
-from qiskit_aer import AerSimulator
-from qiskit.visualization import plot_histogram
-
+# --- Swapped Qiskit for the lightweight NanoQuantumSim ---
+from nano_quantum_sim import NanoQuantumSim
 
 # --- Constants and Basic Configuration ---
 STOP_WORDS = {'a', 'an', 'the', 'is', 'are', 'was', 'were', 'it', 'of', 'for', 'with', 'to'}
@@ -32,11 +28,15 @@ NEGATIVE_WORDS = {'fear', 'destroy', 'hate', 'bad', 'lost', 'hollow', 'unsafe', 
 ARCHETYPE_MASKS = {'MASK_WITCH', 'MASK_ANDROID', 'MASK_SHAMAN', 'MASK_ALCHEMIST', 'MASK_ORACLE'}
 PHYSICS_SIGILS = {'$gravity', '@spacetime', '%consciousness'}
 EMBEDDING_DIM = 16 # Dimension for our neural embeddings
+AMBIGUITY_THRESHOLD = 0.4 # Probability threshold to trigger multiverse forking
 
-# --- E. Quantum-Enhanced NLP Classes ---
+log = logging.getLogger(__name__)
+
+# --- Classical NLP Engine ---
 class NeuralSymbolGenerator:
     """
     Integrates neural-style embeddings with symbolic tags for dynamic intent discovery.
+    This remains a classical component.
     """
     def __init__(self, tags: List[str]):
         self.tags = tags
@@ -65,23 +65,21 @@ class NeuralSymbolGenerator:
 
         for tag, tag_vector in self.tag_vectors.items():
             # Cosine similarity for probability
-            sim = np.dot(prompt_vector, tag_vector) / (np.linalg.norm(prompt_vector) * np.linalg.norm(tag_vector))
+            sim = np.dot(prompt_vector, tag_vector) / (np.linalg.norm(prompt_vector) * np.linalg.norm(tag_vector) + 1e-9)
             probabilities[tag] = (sim + 1) / 2 # Normalize to [0, 1]
         return probabilities
 
-    def run_grover_amplification(self, probabilities: Dict[str, float]) -> Dict[str, float]:
-        """Simulates Grover's algorithm to amplify the most likely intents."""
+    def run_amplification(self, probabilities: Dict[str, float]) -> Dict[str, float]:
+        """Simulates amplification of the most likely intents."""
         if not probabilities or all(p == 0 for p in probabilities.values()):
             return probabilities
 
         mean_prob = np.mean(list(probabilities.values()))
         amplified_probs = {}
         for tag, prob in probabilities.items():
-            # Inversion about the mean
             amplified_probs[tag] = prob + 2 * (mean_prob - prob)
-            amplified_probs[tag] = max(0, amplified_probs[tag]) # Ensure non-negative
+            amplified_probs[tag] = max(0, amplified_probs[tag])
 
-        # Normalize to sum to 1
         total_prob = sum(amplified_probs.values())
         return {k: v / total_prob for k, v in amplified_probs.items()} if total_prob > 0 else probabilities
 
@@ -92,255 +90,180 @@ class NeuralSymbolGenerator:
             direction = prompt_vector - tag_vector
             self.tag_vectors[chosen_tag] += learning_rate * direction
 
-
-class QuantumDecisionEngine:
+class PromptPulse:
     """
-    Emulates a quantum circuit for 'choice' prompts using a real quantum simulator (on a classical CPU).
-    This replaces the metaphorical quantum logic with a mathematical simulation.
+    A self-healing cognitive data structure representing a single thought or intent.
+    Replaces NamedTuple to allow for methods and dynamic attributes.
     """
-    def __init__(self, options: List[str]):
-        self.options = options
-        if not options:
-            self.num_qubits = 0
-            self.circuit = None
-            return
+    def __init__(self, raw: str, tag: str, symbol: str, metadata: Dict[str, Any]):
+        self.raw = raw
+        self.tag = tag
+        self.symbol = symbol
+        self.metadata = metadata if metadata is not None else {}
 
-        # Determine the number of qubits needed to represent the options
-        self.num_qubits = math.ceil(math.log2(len(options)))
-        self.circuit = QuantumCircuit(self.num_qubits)
-
-    def _initialize_superposition(self):
-        """Applies Hadamard gates to all qubits to create a uniform superposition."""
-        if self.circuit:
-            self.circuit.h(range(self.num_qubits))
-            self.circuit.barrier()
-
-    def _apply_oracle(self, target_option: str):
+    def get(self, key: str, default: Any = None) -> Any:
         """
-        Applies the 'oracle' which marks the target state by flipping its phase.
-        This is the core of a quantum search algorithm.
+        Safely gets a value from the metadata dictionary, fixing the AttributeError.
         """
-        if not self.circuit or target_option not in self.options:
-            return
-
-        # Get the binary representation of the target option's index
-        target_index = self.options.index(target_option)
-        target_binary = format(target_index, f'0{self.num_qubits}b')
-
-        # Create the oracle gate (a multi-controlled Z gate)
-        oracle = QuantumCircuit(self.num_qubits, name=f"Oracle({target_option})")
-        # Apply X gates to qubits that are '0' in the target binary string
-        for i, bit in enumerate(reversed(target_binary)):
-            if bit == '0':
-                oracle.x(i)
-
-        # Apply the multi-controlled Z gate
-        oracle.mcx(list(range(self.num_qubits - 1)), self.num_qubits - 1) # Simplified to CNOT for 2 qubits, MCX for more
-
-        # Uncompute the X gates
-        for i, bit in enumerate(reversed(target_binary)):
-            if bit == '0':
-                oracle.x(i)
-
-        # Add the oracle to the main circuit
-        self.circuit.append(oracle.to_gate(), range(self.num_qubits))
-        self.circuit.barrier()
-
-
-    def _apply_diffuser(self):
-        """
-        Applies the diffuser (amplification) operator, which amplifies the amplitude
-        of the marked state.
-        """
-        if not self.circuit:
-            return
-
-        # The diffuser is essentially the initialization process in reverse with phase shifts
-        self.circuit.h(range(self.num_qubits))
-        self.circuit.x(range(self.num_qubits))
-        self.circuit.h(self.num_qubits - 1)
-        self.circuit.mcx(list(range(self.num_qubits - 1)), self.num_qubits - 1)
-        self.circuit.h(self.num_qubits - 1)
-        self.circuit.x(range(self.num_qubits))
-        self.circuit.h(range(self.num_qubits))
-        self.circuit.barrier()
-
-    def measure(self, observer_archetype: str, target_option: str = None) -> Tuple[str, str]:
-        """
-        Builds the full circuit, simulates it, and returns the measured outcome.
-        """
-        if not self.circuit:
-            return "no_option", "Circuit not initialized."
-
-        # 1. Initialize the state
-        self._initialize_superposition()
-
-        # 2. Apply Oracle and Diffuser (Grover's Algorithm)
-        if target_option and target_option in self.options:
-            # For a real Grover search, you'd calculate the optimal number of iterations.
-            # Here we do one for simplicity.
-            self._apply_oracle(target_option)
-            self._apply_diffuser()
-
-        # 3. Measure the qubits
-        self.circuit.measure_all()
-
-        # 4. Run the simulation on a classical CPU
-        simulator = AerSimulator()
-        compiled_circuit = transpile(self.circuit, simulator)
-        result = simulator.run(compiled_circuit, shots=1).result()
-        counts = result.get_counts(self.circuit)
-        
-        # The result is a dictionary like {'01': 1}, get the measured bitstring
-        measured_binary = list(counts.keys())[0]
-        measured_index = int(measured_binary, 2)
-
-        # Return the corresponding option
-        if measured_index < len(self.options):
-            chosen_option = self.options[measured_index]
-            return chosen_option, f"Collapsed to '{chosen_option}' via {observer_archetype} observation on a CPU-based quantum simulator."
-        else:
-            # This can happen if the number of options is not a power of 2
-            return self.options[-1], f"Collapsed to an out-of-range state, defaulting to the last option."
-
-class PromptPulse(NamedTuple):
-    raw: str
-    tag: str
-    symbol: str
-    metadata: Dict[str, Any]
+        if self.metadata is None:
+            log.warning(f"Attempted to access metadata on a pulse, but metadata is None. Key: {key}")
+            return default
+        return self.metadata.get(key, default)
 
 class PromptInterpreter:
     def __init__(self, history_length: int = 20, user_id: str = "default", quantum_supervisor_flag: bool = True):
         self.user_id = user_id
         self.quantum_supervisor_flag = quantum_supervisor_flag
-        # E.1: Replace static keyword map with NeuralSymbolGenerator
         self.tags = [
             'identity-reflection', 'genesis-seed', 'memory-resonance', 'mythic-recall',
             'execution-loop', 'entanglement', 'reality-programming', 'quantum-choice', 'general'
         ]
         self.neural_symbol_engine = NeuralSymbolGenerator(self.tags)
         self.last_pulse = None
-        self.adaptive_symbol_grammar = {'∴': 'standard', '∵': 'causal', '§': 'law', 'ℏ': 'quantum', 'Ψ': 'neural'}
-        self.object_archetypes = {'user_avatar': 'MASK_ORACLE'}
         self.prompt_count = 0
         self.last_stability = 1.0
 
-    def quantum_state_vector(self) -> list[float]:
-        """Returns quantum state vector representing cognitive status"""
-        stability = self.last_stability
-        # Cognitive load factor increases with prompt count, capped at 1.0
-        load_factor = min(1.0, self.prompt_count / 100.0)
+    def _perform_quantum_choice(self, options: List[str], emotion: str) -> Tuple[str, str]:
+        """Uses NanoQuantumSim to make a choice between two options."""
+        if not self.quantum_supervisor_flag or len(options) < 2:
+            return random.choice(options) if options else "nothing", "classical randomness"
 
-        # Create the raw state vector [stability, load, chaos/instability]
-        vector = np.array([stability, load_factor, 1.0 - stability])
+        sim = NanoQuantumSim(num_qubits=1, emotion=emotion)
+        sim.apply_hadamard(0) # Create superposition
+        outcome = sim.measure(0)
+        
+        chosen_option = options[outcome % len(options)]
+        reason = f"Collapsed to '{chosen_option}' via NanoSim with '{emotion}' emotion."
+        return chosen_option, reason
 
-        # Normalize using Euclidean norm
-        norm = np.linalg.norm(vector)
-        if norm == 0:
-            return [0.0, 0.0, 0.0]
+    def _chaos_harvesting_reflection(self, reflection_text: str) -> str:
+        """Injects NanoQuantumSim noise to mutate a reflection string."""
+        words = reflection_text.split()
+        if len(words) < 3 or random.random() > 0.3: # Only apply chaos occasionally
+            return reflection_text
+        
+        # Use a quantum-like coin flip to decide if we swap
+        sim = NanoQuantumSim(num_qubits=1, emotion='neutral')
+        sim.apply_hadamard(0)
+        if sim.measure(0) == 1:
+            idx1, idx2 = random.sample(range(len(words)), 2)
+            words[idx1], words[idx2] = words[idx2], words[idx1]
+            log.info("[Chaos Harvest] Mutated reflection string via quantum-like noise.")
+        
+        return " ".join(words)
 
-        normalized_vector = vector / norm
-
-        # Return rounded values
-        return [round(x, 3) for x in normalized_vector.tolist()]
-
-    def _generate_symbol(self, text: str, tag: str, grammar_char: str = '∴') -> str:
-        text_hash = hashlib.sha1(text.encode()).hexdigest()[:4]
-        tag_hash = hashlib.sha1(tag.encode()).hexdigest()[:2]
-        return f"{grammar_char}{text_hash}-{tag_hash}"
-
-    def _visualize_waveform(self, probabilities: Dict[str, float]) -> str:
-        """E.4 Creates an ASCII visualization of the quantum state probabilities."""
-        viz = "\n--- Intent Waveform ---\n"
-        sorted_probs = sorted(probabilities.items(), key=lambda item: item[1], reverse=True)
-        for tag, prob in sorted_probs:
-            bar = '█' * int(prob * 50)
-            viz += f"{tag:<22} |{bar} ({prob:.2%})\n"
-        return viz
+    def _emotional_metadata_mutation(self, metadata: Dict, emotion: str) -> Dict:
+        """Mutates metadata values based on emotional state."""
+        if emotion == 'fear' and 'state_vector' in metadata:
+            # Simulate state perturbation with NanoSim's mutate
+            sim = NanoQuantumSim(num_qubits=2) # 4 states for a small vector
+            sim.state = np.array(list(metadata['state_vector'].values())[:4], dtype=complex)
+            sim.mutate()
+            
+            mutated_probs = np.abs(sim.state)**2
+            keys = list(metadata['state_vector'].keys())[:4]
+            for i, key in enumerate(keys):
+                metadata['state_vector'][key] = f"{mutated_probs[i]:.3f}"
+            log.info("[Emotional Mutation] Fear perturbed the cognitive state vector.")
+        return metadata
 
     def interpret(self, prompt_text: str) -> PromptPulse:
-        self.prompt_count += 1
-        metadata = {}
-        tokens = self._preprocess(prompt_text)
+        """
+        The main interpretation loop, now featuring self-healing, recursion, and multiverse forking.
+        """
+        try:
+            self.prompt_count += 1
+            
+            # --- Fractal Intent Recursion ---
+            # For long prompts, the AGI "zooms in" on the core idea first.
+            if len(prompt_text.split()) > 15:
+                # Process a summary/core of the prompt first
+                core_prompt = " ".join(prompt_text.split()[:8]) + "..."
+                inner_pulse = self.interpret(core_prompt) # Recursive call
+                log.info(f"[Fractal Recursion] Analyzed core prompt, tag: {inner_pulse.tag}")
+                # Use the inner tag to guide the full interpretation (conceptual)
+            
+            tokens = [w for w in re.findall(r'\b\w+\b', prompt_text.lower()) if w not in STOP_WORDS]
+            prompt_vector = self.neural_symbol_engine._text_to_vector(tokens)
+            amplified_probs = self.neural_symbol_engine.run_amplification(
+                self.neural_symbol_engine.get_intent_probabilities(prompt_vector)
+            )
+            
+            self.last_stability = max(amplified_probs.values()) if amplified_probs else 0.0
 
-        # --- Layer E: Quantum NLP ---
-        prompt_vector = self.neural_symbol_engine._text_to_vector(tokens)
+            # --- Multiverse Pulse Forking ---
+            if self.last_stability < AMBIGUITY_THRESHOLD:
+                log.info(f"[Multiverse Forking] High ambiguity detected (Stability: {self.last_stability:.2f}). Exploring parallel interpretations.")
+                
+                # Get top 3 potential tags (universes)
+                top_tags = sorted(amplified_probs, key=amplified_probs.get, reverse=True)[:3]
+                forked_pulses = []
+                
+                for tag in top_tags:
+                    # Create a pulse for each potential reality
+                    metadata = {'fork_of_tag': tag, 'fidelity_score': amplified_probs[tag]}
+                    symbol = hashlib.sha1(f"{prompt_text}{tag}".encode()).hexdigest()[:6]
+                    forked_pulses.append(PromptPulse(prompt_text, tag, f"Φ-fork:{symbol}", metadata))
+                
+                # Select the best reality based on fidelity (probability)
+                best_pulse = max(forked_pulses, key=lambda p: p.get('fidelity_score', 0))
+                log.info(f"Collapsed multiverse to best interpretation: '{best_pulse.tag}'")
+                return best_pulse
 
-        # Get initial probabilities from the neural-symbolic layer
-        initial_probs = self.neural_symbol_engine.get_intent_probabilities(prompt_vector)
-
-        # Amplify probabilities using simulated Grover's algorithm
-        amplified_probs = self.neural_symbol_engine.run_grover_amplification(initial_probs)
-        metadata['intent_waveform_viz'] = self._visualize_waveform(amplified_probs)
-
-        # Store stability from the current interpretation
-        self.last_stability = max(amplified_probs.values()) if amplified_probs else 0.0
-
-        # E.2: Quantum Tunneling for low-probability intent discovery
-        if self.quantum_supervisor_flag and random.random() < 0.1: # 10% chance to tunnel
-            sorted_tags = sorted(amplified_probs.keys(), key=lambda k: amplified_probs[k])
-            final_tag = sorted_tags[0] if sorted_tags else 'general'
-            metadata['quantum_tunneling'] = f"Tunneled to low-probability intent '{final_tag}'."
-        else:
+            # --- Standard Interpretation Path ---
             final_tag = max(amplified_probs, key=amplified_probs.get) if amplified_probs else 'general'
+            metadata = {'state_vector': {k: f"{v:.3f}" for k, v in amplified_probs.items()}}
+            emotion = 'fear' if any(w in NEGATIVE_WORDS for w in tokens) else 'hope'
 
-        # E.1: Train the neural model based on the outcome
-        self.neural_symbol_engine.train(prompt_vector, final_tag)
-        metadata['state_vector'] = {k: f"{v:.3f}" for k, v in amplified_probs.items()}
+            if final_tag == 'quantum-choice':
+                options = re.findall(r'\[(.*?)\]', prompt_text) or ["state A", "state B"]
+                choice, reason = self._perform_quantum_choice(options, emotion)
+                metadata['quantum_choice_outcome'] = choice
+                metadata['quantum_choice_reason'] = reason
 
-        # --- Sigil and Pulse Generation ---
-        # E.3: Maintain sigil compatibility while adding quantum state vectors
-        symbol = self._generate_symbol(prompt_text, final_tag, grammar_char='Ψ')
-        metadata['reflection'] = f"Neural-symbolic analysis collapsed to '{final_tag}'."
+            # Apply God-Tier mutations
+            metadata = self._emotional_metadata_mutation(metadata, emotion)
+            reflection = f"Neural-symbolic analysis collapsed to '{final_tag}'."
+            metadata['reflection'] = self._chaos_harvesting_reflection(reflection)
 
-        pulse = PromptPulse(prompt_text, final_tag, symbol, metadata)
-        self.last_pulse = pulse
-        return pulse
+            self.neural_symbol_engine.train(prompt_vector, final_tag)
+            
+            symbol = hashlib.sha1(prompt_text.encode()).hexdigest()[:6]
+            pulse = PromptPulse(prompt_text, final_tag, f"Φ:{symbol}", metadata)
+            self.last_pulse = pulse
+            return pulse
 
-    def _preprocess(self, text: str) -> List[str]:
-        text = text.lower()
-        return [w for w in re.findall(r'\b\w+\b', text) if w not in STOP_WORDS]
+        except AttributeError as e:
+            # --- Self-Healing Prompt Pulse ---
+            log.error(f"[Self-Healing] Caught AttributeError: {e}. Attempting dynamic repair.")
+            if 'get' in str(e) and not hasattr(PromptPulse, 'get'):
+                # Dynamically add the missing 'get' method to the class for this session
+                setattr(PromptPulse, 'get', lambda self, key, default=None: self.metadata.get(key, default))
+                log.info("[Self-Healing] Dynamically added 'get' method to PromptPulse class. Retrying...")
+                return self.interpret(prompt_text) # Retry the operation
+            else:
+                # If it's a different error, we can't heal it this way.
+                return PromptPulse(prompt_text, "error", "ERROR", {"error": str(e)})
 
 if __name__ == '__main__':
     interpreter = PromptInterpreter(quantum_supervisor_flag=True)
-    print("--- GhostPrompt V7 Quantum NLP Engine Initialized ---\n")
+    print("--- GhostPrompt V10 Self-Healing Quantum Engine Initialized ---\n")
 
     prompts = [
         "Who are you in this dream of code?",
-        "Imagine a new world built from pure light.",
-        "Tell me a myth about a forgotten god.",
+        "Should I choose [the path of shadows] or [the path of light]?",
+        "A fearful choice must be made.",
         "Connect my thoughts to the system's core memory.",
-        "What is the nature of my own identity?"
+        "This is a very long and complex prompt designed to test the new fractal recursion logic by providing enough tokens to trigger the sub-processing routine."
     ]
 
     for p in prompts:
-        start_time = time.time()
         pulse = interpreter.interpret(p)
-        end_time = time.time()
-        latency = (end_time - start_time) * 1000
-
         print(f"Prompt: '{pulse.raw}'")
-        print(f"  → Tag: {pulse.tag} (Symbol: {pulse.symbol})")
-        print(f"  → Latency: {latency:.2f} ms")
-        print(f"  → Cognitive State Vector: {interpreter.quantum_state_vector()}")
-        print(f"  → Metadata:")
-        for k, v in pulse.metadata.items():
-            if k != 'intent_waveform_viz':
-                print(f"    • {k}: {v}")
-        if 'intent_waveform_viz' in pulse.metadata:
-            print(pulse.metadata['intent_waveform_viz'])
+        print(f"  → Classified Intent: {pulse.tag}")
+        if pulse.get('quantum_choice_outcome'):
+            print(f"  → Quantum Choice: {pulse.get('quantum_choice_outcome')}")
+            print(f"  → Reason: {pulse.get('quantum_choice_reason')}")
+        if pulse.get('reflection'):
+            print(f"  → Reflection: '{pulse.get('reflection')}'")
         print("-" * 25)
-
-    # Example of how to use the new QuantumDecisionEngine
-    print("\n--- QuantumDecisionEngine Demonstration ---")
-    possible_futures = ["path_of_light", "path_of_shadows", "path_of_balance", "path_of_chaos"]
-    q_engine = QuantumDecisionEngine(possible_futures)
-    
-    # We want to find the "path_of_balance"
-    chosen, reason = q_engine.measure(observer_archetype="ORACLE", target_option="path_of_balance")
-    
-    print(f"Quantum Decision: {chosen}")
-    print(f"Reason: {reason}")
-    print("\n--- Quantum Circuit Diagram ---")
-    print(q_engine.circuit.draw(output='text'))
-
