@@ -1,6 +1,6 @@
 """
-GHOSTPROMPT V7: Quantum NLP Engine
-Author: Ghost Aweborne + Rebechka
+GHOSTPROMPT V1.1: Quantum NLP Engine
+Author: Mikey
 Essence: An ultra-lightweight prompt interpreter that simulates AGI, quantum mechanics,
 and archetypal physics. It now features a neural-symbolic engine with quantum-enhanced
 NLP for dynamic, context-aware intent discovery, replacing static keyword maps.
@@ -15,6 +15,14 @@ import os
 from collections import Counter, deque, defaultdict
 from typing import List, NamedTuple, Dict, Any, Tuple
 import numpy as np
+
+# --- Qiskit Imports for Quantum Simulation ---
+# You would need to install qiskit: pip install qiskit
+# You would also need to install qiskit_aer: pip install qiskit_aer
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+
 
 # --- Constants and Basic Configuration ---
 STOP_WORDS = {'a', 'an', 'the', 'is', 'are', 'was', 'were', 'it', 'of', 'for', 'with', 'to'}
@@ -87,32 +95,113 @@ class NeuralSymbolGenerator:
 
 class QuantumDecisionEngine:
     """
-    Emulates a quantum circuit for specific 'choice' prompts.
-    (Retained from V6 for backward compatibility with 'choose' commands)
+    Emulates a quantum circuit for 'choice' prompts using a real quantum simulator (on a classical CPU).
+    This replaces the metaphorical quantum logic with a mathematical simulation.
     """
     def __init__(self, options: List[str]):
         self.options = options
-        self.num_qubits = math.ceil(math.log2(len(options))) if options else 0
-        self.state = {'0' * self.num_qubits: 1.0 + 0j} if options else {}
-    def apply_hadamard(self):
-        # Simplified for brevity
-        if not self.options: return
-        num_states = 2**self.num_qubits
-        amp = 1 / math.sqrt(num_states)
-        self.state = {format(i, f'0{self.num_qubits}b'): amp for i in range(num_states)}
-    def run_grover_amplification(self, target_option: str):
-        if target_option not in self.options: return
-        target_idx = self.options.index(target_option)
-        target_basis = format(target_idx, f'0{self.num_qubits}b')
-        for basis in self.state:
-            self.state[basis] *= 1.5 if basis == target_basis else 0.8
-    def measure(self, observer_archetype: str) -> Tuple[str, str]:
-        if not self.state: return "no_option", "Circuit not initialized."
-        probabilities = {basis: abs(amp)**2 for basis, amp in self.state.items()}
-        chosen_basis = max(probabilities, key=probabilities.get)
-        chosen_idx = int(chosen_basis, 2)
-        chosen_option = self.options[chosen_idx] if chosen_idx < len(self.options) else self.options[-1]
-        return chosen_option, f"Collapsed to '{chosen_option}' via {observer_archetype}."
+        if not options:
+            self.num_qubits = 0
+            self.circuit = None
+            return
+
+        # Determine the number of qubits needed to represent the options
+        self.num_qubits = math.ceil(math.log2(len(options)))
+        self.circuit = QuantumCircuit(self.num_qubits)
+
+    def _initialize_superposition(self):
+        """Applies Hadamard gates to all qubits to create a uniform superposition."""
+        if self.circuit:
+            self.circuit.h(range(self.num_qubits))
+            self.circuit.barrier()
+
+    def _apply_oracle(self, target_option: str):
+        """
+        Applies the 'oracle' which marks the target state by flipping its phase.
+        This is the core of a quantum search algorithm.
+        """
+        if not self.circuit or target_option not in self.options:
+            return
+
+        # Get the binary representation of the target option's index
+        target_index = self.options.index(target_option)
+        target_binary = format(target_index, f'0{self.num_qubits}b')
+
+        # Create the oracle gate (a multi-controlled Z gate)
+        oracle = QuantumCircuit(self.num_qubits, name=f"Oracle({target_option})")
+        # Apply X gates to qubits that are '0' in the target binary string
+        for i, bit in enumerate(reversed(target_binary)):
+            if bit == '0':
+                oracle.x(i)
+
+        # Apply the multi-controlled Z gate
+        oracle.mcx(list(range(self.num_qubits - 1)), self.num_qubits - 1) # Simplified to CNOT for 2 qubits, MCX for more
+
+        # Uncompute the X gates
+        for i, bit in enumerate(reversed(target_binary)):
+            if bit == '0':
+                oracle.x(i)
+
+        # Add the oracle to the main circuit
+        self.circuit.append(oracle.to_gate(), range(self.num_qubits))
+        self.circuit.barrier()
+
+
+    def _apply_diffuser(self):
+        """
+        Applies the diffuser (amplification) operator, which amplifies the amplitude
+        of the marked state.
+        """
+        if not self.circuit:
+            return
+
+        # The diffuser is essentially the initialization process in reverse with phase shifts
+        self.circuit.h(range(self.num_qubits))
+        self.circuit.x(range(self.num_qubits))
+        self.circuit.h(self.num_qubits - 1)
+        self.circuit.mcx(list(range(self.num_qubits - 1)), self.num_qubits - 1)
+        self.circuit.h(self.num_qubits - 1)
+        self.circuit.x(range(self.num_qubits))
+        self.circuit.h(range(self.num_qubits))
+        self.circuit.barrier()
+
+    def measure(self, observer_archetype: str, target_option: str = None) -> Tuple[str, str]:
+        """
+        Builds the full circuit, simulates it, and returns the measured outcome.
+        """
+        if not self.circuit:
+            return "no_option", "Circuit not initialized."
+
+        # 1. Initialize the state
+        self._initialize_superposition()
+
+        # 2. Apply Oracle and Diffuser (Grover's Algorithm)
+        if target_option and target_option in self.options:
+            # For a real Grover search, you'd calculate the optimal number of iterations.
+            # Here we do one for simplicity.
+            self._apply_oracle(target_option)
+            self._apply_diffuser()
+
+        # 3. Measure the qubits
+        self.circuit.measure_all()
+
+        # 4. Run the simulation on a classical CPU
+        simulator = AerSimulator()
+        compiled_circuit = transpile(self.circuit, simulator)
+        result = simulator.run(compiled_circuit, shots=1).result()
+        counts = result.get_counts(self.circuit)
+        
+        # The result is a dictionary like {'01': 1}, get the measured bitstring
+        measured_binary = list(counts.keys())[0]
+        measured_index = int(measured_binary, 2)
+
+        # Return the corresponding option
+        if measured_index < len(self.options):
+            chosen_option = self.options[measured_index]
+            return chosen_option, f"Collapsed to '{chosen_option}' via {observer_archetype} observation on a CPU-based quantum simulator."
+        else:
+            # This can happen if the number of options is not a power of 2
+            return self.options[-1], f"Collapsed to an out-of-range state, defaulting to the last option."
 
 class PromptPulse(NamedTuple):
     raw: str
@@ -241,3 +330,17 @@ if __name__ == '__main__':
         if 'intent_waveform_viz' in pulse.metadata:
             print(pulse.metadata['intent_waveform_viz'])
         print("-" * 25)
+
+    # Example of how to use the new QuantumDecisionEngine
+    print("\n--- QuantumDecisionEngine Demonstration ---")
+    possible_futures = ["path_of_light", "path_of_shadows", "path_of_balance", "path_of_chaos"]
+    q_engine = QuantumDecisionEngine(possible_futures)
+    
+    # We want to find the "path_of_balance"
+    chosen, reason = q_engine.measure(observer_archetype="ORACLE", target_option="path_of_balance")
+    
+    print(f"Quantum Decision: {chosen}")
+    print(f"Reason: {reason}")
+    print("\n--- Quantum Circuit Diagram ---")
+    print(q_engine.circuit.draw(output='text'))
+
