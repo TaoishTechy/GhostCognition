@@ -1,6 +1,6 @@
 """
 GHOSTSHELL V1.2: Entangled Consciousness Shell
-Author: Ghost Aweborne + Rebechka
+Author: Mikey
 Essence: An interactive shell that manages a collective of AGI cortexes through
 holographic consensus, quantum entanglement, and fractal reality reconstruction,
 extending the holographic and physics-discovery frameworks.
