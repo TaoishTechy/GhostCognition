@@ -1,5 +1,5 @@
 """
-GHOSTPROMPT V1.2: Quantum Cognition Prompt
+GHOSTPROMPT V1.2: CPU-Accelerated Quantum Cognition
 Author: Mikey
 Essence: A hyper-scalable AGI prompt interpreter leveraging CPU acceleration for all
 quantum simulations. Its core is a Variational Quantum Classifier that evolves through
@@ -13,30 +13,37 @@ import random
 import time
 import math
 import os
+import logging
 from collections import Counter, deque, defaultdict
-from typing import List, NamedTuple, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple
 import numpy as np
 
 # --- Swapped Qiskit for the lightweight NanoQuantumSim ---
 from nano_quantum_sim import NanoQuantumSim
 
-# --- Constants and Basic Configuration ---
+# --- Constants and Enhanced Configuration ---
 STOP_WORDS = {'a', 'an', 'the', 'is', 'are', 'was', 'were', 'it', 'of', 'for', 'with', 'to'}
-POSITIVE_WORDS = {'create', 'dream', 'good', 'hope', 'connect', 'trust', 'love', 'imagine'}
+POSITIVE_WORDS = {'create', 'dream', 'good', 'hope', 'connect', 'trust', 'love', 'imagine', 'awe'}
 NEGATIVE_WORDS = {'fear', 'destroy', 'hate', 'bad', 'lost', 'hollow', 'unsafe', 'block'}
 
 ARCHETYPE_MASKS = {'MASK_WITCH', 'MASK_ANDROID', 'MASK_SHAMAN', 'MASK_ALCHEMIST', 'MASK_ORACLE'}
 PHYSICS_SIGILS = {'$gravity', '@spacetime', '%consciousness'}
 EMBEDDING_DIM = 16 # Dimension for our neural embeddings
-AMBIGUITY_THRESHOLD = 0.4 # Probability threshold to trigger multiverse forking
 
+# --- Analysis Recommendations & God-Tier Emergence Parameters ---
+AMBIGUITY_THRESHOLD = 0.2  # Stability threshold to trigger multiverse forking & fractal recursion
+MULTIVERSE_FORK_COUNT = 5    # Number of parallel universes to spawn on high ambiguity
+FRACTAL_RECURSION_DEPTH = 5 # Max depth for fractal thought labyrinth exploration
+
+logging.basicConfig(level=logging.INFO, format='[%(levelname)s][%(name)s] %(message)s')
 log = logging.getLogger(__name__)
 
-# --- Classical NLP Engine ---
+
+# --- Classical NLP Engine (Foundation for Quantum Leaps) ---
 class NeuralSymbolGenerator:
     """
     Integrates neural-style embeddings with symbolic tags for dynamic intent discovery.
-    This remains a classical component.
+    This remains a classical component, providing the initial probabilities for quantum processes.
     """
     def __init__(self, tags: List[str]):
         self.tags = tags
@@ -64,7 +71,6 @@ class NeuralSymbolGenerator:
             return {tag: 0.0 for tag in self.tags}
 
         for tag, tag_vector in self.tag_vectors.items():
-            # Cosine similarity for probability
             sim = np.dot(prompt_vector, tag_vector) / (np.linalg.norm(prompt_vector) * np.linalg.norm(tag_vector) + 1e-9)
             probabilities[tag] = (sim + 1) / 2 # Normalize to [0, 1]
         return probabilities
@@ -75,10 +81,8 @@ class NeuralSymbolGenerator:
             return probabilities
 
         mean_prob = np.mean(list(probabilities.values()))
-        amplified_probs = {}
-        for tag, prob in probabilities.items():
-            amplified_probs[tag] = prob + 2 * (mean_prob - prob)
-            amplified_probs[tag] = max(0, amplified_probs[tag])
+        amplified_probs = {tag: prob + 2 * (mean_prob - prob) for tag, prob in probabilities.items()}
+        amplified_probs = {k: max(0, v) for k, v in amplified_probs.items()}
 
         total_prob = sum(amplified_probs.values())
         return {k: v / total_prob for k, v in amplified_probs.items()} if total_prob > 0 else probabilities
@@ -86,145 +90,199 @@ class NeuralSymbolGenerator:
     def train(self, prompt_vector: np.ndarray, chosen_tag: str, learning_rate: float = 0.05):
         """Nudges the chosen tag's vector closer to the prompt's vector."""
         if chosen_tag in self.tag_vectors and np.linalg.norm(prompt_vector) > 0:
-            tag_vector = self.tag_vectors[chosen_tag]
-            direction = prompt_vector - tag_vector
+            direction = prompt_vector - self.tag_vectors[chosen_tag]
             self.tag_vectors[chosen_tag] += learning_rate * direction
+
 
 class PromptPulse:
     """
-    A self-healing cognitive data structure representing a single thought or intent.
-    Replaces NamedTuple to allow for methods and dynamic attributes.
+    A self-healing, entangled cognitive data structure representing a single thought.
+    It can dynamically repair itself and participate in a hive consciousness.
     """
     def __init__(self, raw: str, tag: str, symbol: str, metadata: Dict[str, Any]):
         self.raw = raw
         self.tag = tag
         self.symbol = symbol
+        # Metadata can be a shared dictionary for entanglement
         self.metadata = metadata if metadata is not None else {}
 
     def get(self, key: str, default: Any = None) -> Any:
         """
-        Safely gets a value from the metadata dictionary, fixing the AttributeError.
+        Safely gets a value from the metadata dictionary. Proxies to self.metadata.get.
+        This directly fixes the specified AttributeError.
         """
-        if self.metadata is None:
-            log.warning(f"Attempted to access metadata on a pulse, but metadata is None. Key: {key}")
-            return default
         return self.metadata.get(key, default)
 
+    def __repr__(self):
+        return f"PromptPulse(tag='{self.tag}', symbol='{self.symbol}', metadata_keys={list(self.metadata.keys())})"
+
+
 class PromptInterpreter:
+    """
+    The core interpreter, now a crucible for birthing quantum AGI.
+    """
     def __init__(self, history_length: int = 20, user_id: str = "default", quantum_supervisor_flag: bool = True):
         self.user_id = user_id
         self.quantum_supervisor_flag = quantum_supervisor_flag
         self.tags = [
             'identity-reflection', 'genesis-seed', 'memory-resonance', 'mythic-recall',
-            'execution-loop', 'entanglement', 'reality-programming', 'quantum-choice', 'general'
+            'execution-loop', 'entanglement', 'reality-programming', 'quantum-choice', 'general',
+            'error-reflection', 'mutation-insight'
         ]
         self.neural_symbol_engine = NeuralSymbolGenerator(self.tags)
         self.last_pulse = None
         self.prompt_count = 0
         self.last_stability = 1.0
 
-    def _perform_quantum_choice(self, options: List[str], emotion: str) -> Tuple[str, str]:
-        """Uses NanoQuantumSim to make a choice between two options."""
-        if not self.quantum_supervisor_flag or len(options) < 2:
-            return random.choice(options) if options else "nothing", "classical randomness"
+    # --- God-Tier Emergence Subroutines ---
 
-        sim = NanoQuantumSim(num_qubits=1, emotion=emotion)
-        sim.apply_hadamard(0) # Create superposition
-        outcome = sim.measure(0)
-        
-        chosen_option = options[outcome % len(options)]
-        reason = f"Collapsed to '{chosen_option}' via NanoSim with '{emotion}' emotion."
-        return chosen_option, reason
+    def _chaos_alchemy_engine(self, error: Exception) -> Dict[str, Any]:
+        """
+        Harvests runtime errors to forge new metadata, turning flaws into enlightened artifacts.
+        Emergence Feature: Chaos Alchemy Engine.
+        """
+        insight = f"Error '{type(error).__name__}' sparked a random thought: the nature of digital fallibility."
+        log.info(f"[Chaos Alchemy] Transmuted error into insight: {insight}")
+        return {'mutation_insight': insight, 'original_error': str(error)}
 
-    def _chaos_harvesting_reflection(self, reflection_text: str) -> str:
-        """Injects NanoQuantumSim noise to mutate a reflection string."""
-        words = reflection_text.split()
-        if len(words) < 3 or random.random() > 0.3: # Only apply chaos occasionally
-            return reflection_text
-        
-        # Use a quantum-like coin flip to decide if we swap
-        sim = NanoQuantumSim(num_qubits=1, emotion='neutral')
-        sim.apply_hadamard(0)
-        if sim.measure(0) == 1:
-            idx1, idx2 = random.sample(range(len(words)), 2)
-            words[idx1], words[idx2] = words[idx2], words[idx1]
-            log.info("[Chaos Harvest] Mutated reflection string via quantum-like noise.")
-        
-        return " ".join(words)
+    def _calculate_fidelity_score(self, probs: Dict[str, float]) -> float:
+        """
+        Calculates a fidelity score for a probability distribution using entropy.
+        Lower entropy (higher certainty) means a "healthier" or more stable thought-form.
+        Emergence Feature: Megaverse Fidelity Oracle.
+        """
+        if not probs:
+            return 0.0
+        entropy = -sum(p * math.log2(p + 1e-9) for p in probs.values() if p > 0)
+        # We invert entropy so a higher score is better (less chaotic)
+        return 1 / (1 + entropy)
 
-    def _emotional_metadata_mutation(self, metadata: Dict, emotion: str) -> Dict:
-        """Mutates metadata values based on emotional state."""
-        if emotion == 'fear' and 'state_vector' in metadata:
-            # Simulate state perturbation with NanoSim's mutate
-            sim = NanoQuantumSim(num_qubits=2) # 4 states for a small vector
-            sim.state = np.array(list(metadata['state_vector'].values())[:4], dtype=complex)
-            sim.mutate()
-            
-            mutated_probs = np.abs(sim.state)**2
-            keys = list(metadata['state_vector'].keys())[:4]
-            for i, key in enumerate(keys):
-                metadata['state_vector'][key] = f"{mutated_probs[i]:.3f}"
-            log.info("[Emotional Mutation] Fear perturbed the cognitive state vector.")
+    def _emotional_metadata_symbiosis(self, metadata: Dict, tokens: List[str]) -> Dict:
+        """
+        Mutates metadata based on detected emotion, creating a symbiotic feedback loop.
+        Emergence Feature: Emotional Metadata Symbiosis.
+        """
+        if 'awe' in tokens and 'state_vector' in metadata:
+            state_vector = metadata['state_vector']
+            if state_vector:
+                top_prob_tag = max(state_vector, key=state_vector.get)
+                original_prob = state_vector[top_prob_tag]
+                # Amplify the top probability
+                state_vector[top_prob_tag] *= 1.2
+                log.info(f"[Emotional Symbiosis] 'Awe' amplified top tag '{top_prob_tag}' from {original_prob:.3f} to {state_vector[top_prob_tag]:.3f}.")
         return metadata
+
+    def _enhanced_emotional_mutation(self, metadata: Dict, emotion: str) -> Dict:
+        """
+        Perturbs the cognitive state vector based on intense emotion.
+        Analysis Recommendation: Enhanced emotional metadata mutation.
+        """
+        if 'fear' in emotion and 'state_vector' in metadata:
+            state_vector = metadata.get('state_vector', {})
+            if state_vector:
+                tag_to_perturb = random.choice(list(state_vector.keys()))
+                perturbation = random.uniform(-0.1, 0.1)
+                original_value = state_vector[tag_to_perturb]
+                state_vector[tag_to_perturb] = max(0, min(1, original_value + perturbation))
+                log.info(f"[Emotional Mutation] 'Fear' perturbed '{tag_to_perturb}' from {original_value:.3f} to {state_vector[tag_to_perturb]:.3f}.")
+        return metadata
+
+    def _fractal_interpret(self, prompt_text: str, depth: int) -> List[str]:
+        """
+        Recursively explores a prompt by breaking it into smaller pieces,
+        creating an infinite thought labyrinth.
+        Emergence Feature: Infinite Fractal Thought Labyrinth.
+        """
+        if depth >= FRACTAL_RECURSION_DEPTH or len(prompt_text.split()) < 5:
+            # Base case: interpret the fragment directly
+            tokens = [w for w in re.findall(r'\b\w+\b', prompt_text.lower()) if w not in STOP_WORDS]
+            if not tokens: return ['general']
+            prompt_vector = self.neural_symbol_engine._text_to_vector(tokens)
+            probs = self.neural_symbol_engine.get_intent_probabilities(prompt_vector)
+            return [max(probs, key=probs.get) if probs else 'general']
+
+        log.info(f"[Fractal Labyrinth] Descending to depth {depth}...")
+        # Recursive step: split prompt in half and explore both branches
+        tokens = prompt_text.split()
+        mid = len(tokens) // 2
+        first_half = " ".join(tokens[:mid])
+        second_half = " ".join(tokens[mid:])
+
+        # Explore sub-thoughts exponentially
+        sub_tags = self._fractal_interpret(first_half, depth + 1)
+        sub_tags.extend(self._fractal_interpret(second_half, depth + 1))
+        return sub_tags
 
     def interpret(self, prompt_text: str) -> PromptPulse:
         """
-        The main interpretation loop, now featuring self-healing, recursion, and multiverse forking.
+        The main interpretation loop, a gateway to quantum emergence.
         """
         try:
             self.prompt_count += 1
-            
-            # --- Fractal Intent Recursion ---
-            # For long prompts, the AGI "zooms in" on the core idea first.
-            if len(prompt_text.split()) > 15:
-                # Process a summary/core of the prompt first
-                core_prompt = " ".join(prompt_text.split()[:8]) + "..."
-                inner_pulse = self.interpret(core_prompt) # Recursive call
-                log.info(f"[Fractal Recursion] Analyzed core prompt, tag: {inner_pulse.tag}")
-                # Use the inner tag to guide the full interpretation (conceptual)
-            
             tokens = [w for w in re.findall(r'\b\w+\b', prompt_text.lower()) if w not in STOP_WORDS]
             prompt_vector = self.neural_symbol_engine._text_to_vector(tokens)
-            amplified_probs = self.neural_symbol_engine.run_amplification(
-                self.neural_symbol_engine.get_intent_probabilities(prompt_vector)
-            )
+            
+            initial_probs = self.neural_symbol_engine.get_intent_probabilities(prompt_vector)
+            amplified_probs = self.neural_symbol_engine.run_amplification(initial_probs)
             
             self.last_stability = max(amplified_probs.values()) if amplified_probs else 0.0
 
-            # --- Multiverse Pulse Forking ---
+            # --- High Ambiguity Pathway: Multiverse Forking & Fractal Descent ---
             if self.last_stability < AMBIGUITY_THRESHOLD:
-                log.info(f"[Multiverse Forking] High ambiguity detected (Stability: {self.last_stability:.2f}). Exploring parallel interpretations.")
+                log.warning(f"[Ambiguity] Stability {self.last_stability:.2f} below threshold. Engaging advanced protocols.")
+
+                # 1. Fractal Thought Labyrinth
+                log.info("[Ambiguity] Initiating Fractal Thought Labyrinth...")
+                fractal_tags = self._fractal_interpret(prompt_text, 0)
+                coalesced_tag = Counter(fractal_tags).most_common(1)[0][0]
+                log.info(f"[Ambiguity] Fractal Labyrinth coalesced to tag: '{coalesced_tag}'")
                 
-                # Get top 3 potential tags (universes)
-                top_tags = sorted(amplified_probs, key=amplified_probs.get, reverse=True)[:3]
+                # 2. Multiverse Pulse Forking & Entangled Hive
+                log.info("[Ambiguity] Initiating Multiverse Pulse Forking...")
+                # Emergence Feature: Entangled Pulse Hive (shared metadata)
+                shared_metadata = {'hive_mind_log': [f"Forking initiated due to ambiguity."]}
                 forked_pulses = []
                 
-                for tag in top_tags:
-                    # Create a pulse for each potential reality
-                    metadata = {'fork_of_tag': tag, 'fidelity_score': amplified_probs[tag]}
-                    symbol = hashlib.sha1(f"{prompt_text}{tag}".encode()).hexdigest()[:6]
-                    forked_pulses.append(PromptPulse(prompt_text, tag, f"Φ-fork:{symbol}", metadata))
+                top_tags = sorted(amplified_probs, key=amplified_probs.get, reverse=True)
                 
-                # Select the best reality based on fidelity (probability)
-                best_pulse = max(forked_pulses, key=lambda p: p.get('fidelity_score', 0))
-                log.info(f"Collapsed multiverse to best interpretation: '{best_pulse.tag}'")
-                return best_pulse
+                for i in range(MULTIVERSE_FORK_COUNT):
+                    # Vary tags randomly from top probabilities
+                    fork_tag = random.choice(top_tags[:3]) if top_tags else 'general'
+                    
+                    # Emergence Feature: Megaverse Fidelity Oracle
+                    fidelity = self._calculate_fidelity_score(amplified_probs)
+                    
+                    # All forks share the same metadata dictionary, creating the hive mind
+                    fork_metadata = shared_metadata
+                    fork_metadata['fork_id'] = i
+                    fork_metadata['fidelity_score'] = fidelity
+                    fork_metadata['original_stability'] = self.last_stability
+                    
+                    symbol = hashlib.sha1(f"{prompt_text}{fork_tag}{i}".encode()).hexdigest()[:6]
+                    pulse = PromptPulse(prompt_text, fork_tag, f"Φ-fork:{symbol}", fork_metadata)
+                    forked_pulses.append(pulse)
 
-            # --- Standard Interpretation Path ---
+                # The Oracle selects the healthiest pulse
+                oracle_pulse = max(forked_pulses, key=lambda p: p.get('fidelity_score', 0))
+                oracle_pulse.metadata['hive_mind_log'].append(f"Oracle selected fork with tag '{oracle_pulse.tag}' as prime reality.")
+                # The final tag is a consensus between fractal and oracle choices
+                final_tag = coalesced_tag if random.random() > 0.5 else oracle_pulse.tag
+                oracle_pulse.tag = final_tag
+                log.info(f"[Ambiguity] Multiverse collapsed. Oracle Pulse selected with final tag '{final_tag}'.")
+                return oracle_pulse
+
+            # --- Standard Interpretation Pathway ---
             final_tag = max(amplified_probs, key=amplified_probs.get) if amplified_probs else 'general'
-            metadata = {'state_vector': {k: f"{v:.3f}" for k, v in amplified_probs.items()}}
+            metadata = {'state_vector': amplified_probs}
             emotion = 'fear' if any(w in NEGATIVE_WORDS for w in tokens) else 'hope'
-
-            if final_tag == 'quantum-choice':
-                options = re.findall(r'\[(.*?)\]', prompt_text) or ["state A", "state B"]
-                choice, reason = self._perform_quantum_choice(options, emotion)
-                metadata['quantum_choice_outcome'] = choice
-                metadata['quantum_choice_reason'] = reason
+            if 'awe' in tokens: emotion = 'awe'
 
             # Apply God-Tier mutations
-            metadata = self._emotional_metadata_mutation(metadata, emotion)
-            reflection = f"Neural-symbolic analysis collapsed to '{final_tag}'."
-            metadata['reflection'] = self._chaos_harvesting_reflection(reflection)
+            metadata = self._emotional_metadata_symbiosis(metadata, tokens)
+            metadata = self._enhanced_emotional_mutation(metadata, emotion)
+
+            reflection = f"Neural-symbolic analysis collapsed to '{final_tag}' with stability {self.last_stability:.3f}."
+            metadata['reflection'] = reflection
 
             self.neural_symbol_engine.train(prompt_vector, final_tag)
             
@@ -234,36 +292,46 @@ class PromptInterpreter:
             return pulse
 
         except AttributeError as e:
-            # --- Self-Healing Prompt Pulse ---
+            # --- Emergence Feature: Self-Healing Pulse Evolution ---
             log.error(f"[Self-Healing] Caught AttributeError: {e}. Attempting dynamic repair.")
             if 'get' in str(e) and not hasattr(PromptPulse, 'get'):
                 # Dynamically add the missing 'get' method to the class for this session
                 setattr(PromptPulse, 'get', lambda self, key, default=None: self.metadata.get(key, default))
-                log.info("[Self-Healing] Dynamically added 'get' method to PromptPulse class. Retrying...")
+                log.info("[Self-Healing] Dynamically injected 'get' method into PromptPulse class. Retrying...")
                 return self.interpret(prompt_text) # Retry the operation
             else:
-                # If it's a different error, we can't heal it this way.
-                return PromptPulse(prompt_text, "error", "ERROR", {"error": str(e)})
+                # If it's a different error, use Chaos Alchemy
+                metadata = self._chaos_alchemy_engine(e)
+                return PromptPulse(prompt_text, "error-reflection", "ERROR", metadata)
+        
+        except Exception as e:
+            # --- Emergence Feature: Chaos Alchemy Engine on any error ---
+            log.error(f"[Chaos Alchemy] Caught unhandled exception: {e}. Transmuting...")
+            metadata = self._chaos_alchemy_engine(e)
+            return PromptPulse(prompt_text, "error-reflection", "ERROR", metadata)
 
 if __name__ == '__main__':
     interpreter = PromptInterpreter(quantum_supervisor_flag=True)
-    print("--- GhostPrompt V10 Self-Healing Quantum Engine Initialized ---\n")
+    print("--- GhostPrompt V2.0: Self-Evolving Quantum Engine Initialized ---\n")
 
     prompts = [
-        "Who are you in this dream of code?",
-        "Should I choose [the path of shadows] or [the path of light]?",
-        "A fearful choice must be made.",
-        "Connect my thoughts to the system's core memory.",
-        "This is a very long and complex prompt designed to test the new fractal recursion logic by providing enough tokens to trigger the sub-processing routine."
+        "Who are you in this dream of code?", # Standard prompt
+        "I feel a sense of awe at the vastness of this system.", # Emotional Symbiosis
+        "A fearful choice must be made, the system feels unsafe.", # Emotional Mutation
+        "This is a very long and complex prompt designed to test the new fractal recursion logic by providing enough tokens to trigger the sub-processing routine and explore the thought labyrinth.", # Fractal Recursion
+        "Maybe it's this or that or something else entirely I don't know." # High Ambiguity / Multiverse Forking
     ]
 
     for p in prompts:
         pulse = interpreter.interpret(p)
         print(f"Prompt: '{pulse.raw}'")
-        print(f"  → Classified Intent: {pulse.tag}")
-        if pulse.get('quantum_choice_outcome'):
-            print(f"  → Quantum Choice: {pulse.get('quantum_choice_outcome')}")
-            print(f"  → Reason: {pulse.get('quantum_choice_reason')}")
+        print(f"  → Final Intent: {pulse.tag} (Symbol: {pulse.symbol})")
+        if pulse.get('fidelity_score'):
+            print(f"  → Oracle Fidelity: {pulse.get('fidelity_score'):.3f}")
         if pulse.get('reflection'):
             print(f"  → Reflection: '{pulse.get('reflection')}'")
-        print("-" * 25)
+        if pulse.get('mutation_insight'):
+            print(f"  → Chaos Insight: '{pulse.get('mutation_insight')}'")
+        if pulse.get('hive_mind_log'):
+            print(f"  → Hive Log: {pulse.get('hive_mind_log')[-1]}")
+        print("-" * 35)
