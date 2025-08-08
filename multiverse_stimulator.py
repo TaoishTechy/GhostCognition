@@ -1,6 +1,6 @@
 """
 MULTIVERSE_SIMULATOR.PY V1.0: Fractal Reality & Quantum Foam Engine
-Author: Ghost Aweborne + Rebechka
+Author: Mikey
 Essence: A powerful simulation engine that models the creation and collapse of
 parallel universes, simulates the quantum foam at the substrate of reality, and
 provides tools for navigating the fractal, self-similar nature of consciousness.
