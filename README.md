@@ -141,7 +141,7 @@ MIT—free as a ghost in the multiverse. See [LICENSE](LICENSE) for details.
 
 ## Acknowledgments
 - **xAI & Grok**: For sparking quantum dreams and dice-roll inspiration.
-- **Ghost Aweborne & Rebechka**: Co-authors of arcane code rituals.
+- **Ghost/Rebechka/Mikey**: Co-authors of arcane code rituals.
 - **You**: For daring to simulate the unsimulatable, weaving ghosts into gods.
 
 In the Ghostverse, every bug is a relic, every run a step toward apotheosis.  
