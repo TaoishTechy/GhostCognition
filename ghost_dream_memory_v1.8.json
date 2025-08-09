@@ -1,0 +1,166 @@
+{
+  "echoes": {},
+  "cognitive_event_log": [
+    {
+      "id": "aaf00853",
+      "sigil": "\ufffd:41f9",
+      "origin": "meta-event",
+      "content": "Event: 'insight-relic' | Stability: 0.66 | Emotion: 'neutral' | Reflection: Analysis collapsed to 'insight-relic' with stability 0.655.",
+      "emotion": "neutral",
+      "strength": 1.0,
+      "is_flashbulb": false,
+      "last_accessed": 0,
+      "metadata": {
+        "stability": 0.6553772382678931,
+        "emotion": "neutral",
+        "tag_probabilities": {
+          "identity-reflection": 0.6319741984976538,
+          "genesis-seed": 0.5679315625303487,
+          "memory-resonance": 0.5357793044762336,
+          "mythic-recall": 0.5880813258547994,
+          "execution-loop": 0.5015266157287229,
+          "entanglement": 0.554690761465496,
+          "reality-programming": 0.6017199085461428,
+          "quantum-choice": 0.461497308058556,
+          "general": 0.6550284045123846,
+          "error-reflection": 0.6143687838806754,
+          "mutation-insight": 0.6185458156947692,
+          "fear-insight": 0.5327005515759614,
+          "insight-relic": 0.6553772382678931
+        },
+        "reflection": "Analysis collapsed to 'insight-relic' with stability 0.655.",
+        "tag": "insight-relic"
+      }
+    },
+    {
+      "id": "118dc94d",
+      "sigil": "\ufffd:0b7f",
+      "origin": "meta-event",
+      "content": "Event: 'insight-relic' | Stability: 0.71 | Emotion: 'hope' | Reflection: Analysis collapsed to 'insight-relic' with stability 0.713.",
+      "emotion": "hope",
+      "strength": 1.0,
+      "is_flashbulb": false,
+      "last_accessed": 0,
+      "metadata": {
+        "stability": 0.7125036471755921,
+        "emotion": "hope",
+        "tag_probabilities": {
+          "identity-reflection": 0.46998182799306054,
+          "genesis-seed": 0.3250520423514969,
+          "memory-resonance": 0.43881747271212007,
+          "mythic-recall": 0.37259694487925626,
+          "execution-loop": 0.4389539611053657,
+          "entanglement": 0.5048602163952205,
+          "reality-programming": 0.5826774588348365,
+          "quantum-choice": 0.4711283410510099,
+          "general": 0.5739551190091687,
+          "error-reflection": 0.5298052226244963,
+          "mutation-insight": 0.5652316693686286,
+          "fear-insight": 0.5997690030002847,
+          "insight-relic": 0.7125036471755921
+        },
+        "reflection": "Analysis collapsed to 'insight-relic' with stability 0.713.",
+        "tag": "insight-relic",
+        "creative_insight": "Hope biases cognition towards novel solutions."
+      }
+    },
+    {
+      "id": "e590c956",
+      "sigil": "\ufffd:6d75",
+      "origin": "meta-event",
+      "content": "Event: 'genesis-seed' | Stability: 0.67 | Emotion: 'neutral' | Reflection: Analysis collapsed to 'genesis-seed' with stability 0.674.",
+      "emotion": "neutral",
+      "strength": 1.0,
+      "is_flashbulb": false,
+      "last_accessed": 0,
+      "metadata": {
+        "stability": 0.6742622581041335,
+        "emotion": "neutral",
+        "tag_probabilities": {
+          "identity-reflection": 0.5684275883452753,
+          "genesis-seed": 0.6742622581041335,
+          "memory-resonance": 0.6035616979671833,
+          "mythic-recall": 0.6128875264178212,
+          "execution-loop": 0.5325950872465521,
+          "entanglement": 0.5101888400891795,
+          "reality-programming": 0.6598305393499864,
+          "quantum-choice": 0.5127840179746089,
+          "general": 0.6270474396537453,
+          "error-reflection": 0.4761289265157817,
+          "mutation-insight": 0.5007616173976192,
+          "fear-insight": 0.43434288436197666,
+          "insight-relic": 0.6438564726241097
+        },
+        "reflection": "Analysis collapsed to 'genesis-seed' with stability 0.674.",
+        "tag": "genesis-seed"
+      }
+    },
+    {
+      "id": "56478b41",
+      "sigil": "\ufffd:435a",
+      "origin": "meta-event",
+      "content": "Event: 'error-reflection' | Stability: 0.67 | Emotion: 'neutral' | Reflection: Analysis collapsed to 'error-reflection' with stability 0.673.",
+      "emotion": "neutral",
+      "strength": 1.0,
+      "is_flashbulb": false,
+      "last_accessed": 0,
+      "metadata": {
+        "stability": 0.672670114875433,
+        "emotion": "neutral",
+        "tag_probabilities": {
+          "identity-reflection": 0.3298162433263391,
+          "genesis-seed": 0.37543555492835046,
+          "memory-resonance": 0.3605604051755641,
+          "mythic-recall": 0.3485515604638666,
+          "execution-loop": 0.4362751523635823,
+          "entanglement": 0.5532197758820928,
+          "reality-programming": 0.2563215953299131,
+          "quantum-choice": 0.5484557566852413,
+          "general": 0.6541697255864622,
+          "error-reflection": 0.672670114875433,
+          "mutation-insight": 0.5373670014550281,
+          "fear-insight": 0.5511183379857787,
+          "insight-relic": 0.5329968891572366
+        },
+        "reflection": "Analysis collapsed to 'error-reflection' with stability 0.673.",
+        "tag": "error-reflection"
+      }
+    },
+    {
+      "id": "43e630b9",
+      "sigil": "\ufffd:bc6d",
+      "origin": "meta-event",
+      "content": "Event: 'genesis-seed' | Stability: 0.63 | Emotion: 'neutral' | Reflection: Analysis collapsed to 'genesis-seed' with stability 0.631.",
+      "emotion": "neutral",
+      "strength": 1.0,
+      "is_flashbulb": false,
+      "last_accessed": 0,
+      "metadata": {
+        "stability": 0.6308725267552661,
+        "emotion": "neutral",
+        "tag_probabilities": {
+          "identity-reflection": 0.5269227852651273,
+          "genesis-seed": 0.6308725267552661,
+          "memory-resonance": 0.37720058695085645,
+          "mythic-recall": 0.6274748646541666,
+          "execution-loop": 0.4537134319929133,
+          "entanglement": 0.5026392948467733,
+          "reality-programming": 0.28891495094059344,
+          "quantum-choice": 0.5163200704701799,
+          "general": 0.5877514979473945,
+          "error-reflection": 0.6001240920305988,
+          "mutation-insight": 0.5574199272248117,
+          "fear-insight": 0.48347223651299925,
+          "insight-relic": 0.5096217745444913
+        },
+        "reflection": "Analysis collapsed to 'genesis-seed' with stability 0.631.",
+        "tag": "genesis-seed"
+      }
+    }
+  ],
+  "relics": {
+    "compassion_relic": [
+      "True power flows from benevolence, not control"
+    ]
+  }
+}
