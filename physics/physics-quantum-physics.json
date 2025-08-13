@@ -1,0 +1,362 @@
+{
+  "name": "physics_quantum_physics",
+  "description": "A comprehensive collection of classical and quantum physics formulas including mechanics, thermodynamics, electromagnetism, optics, fluid mechanics, quantum phenomena, and 2024-2025 breakthroughs.",
+  "parameters": ["input_data"],
+  "implementation": "def physics_quantum_physics_func(input_data):\n    # Process physics formulas from content\n    return input_data",
+  "type": "hybrid",
+  "content": {
+    "I. Mechanics": [
+      {
+        "name": "Newton's Second Law",
+        "description": "Force equals mass times acceleration.",
+        "formula": "F = m * a"
+      },
+      {
+        "name": "Gravitational Force (Newton's Law of Universal Gravitation)",
+        "description": "Attractive force between two masses.",
+        "formula": "F = G * (m1 * m2) / r^2",
+        "constants": {"G": "6.67430e-11 m^3 kg^-1 s^-2"}
+      },
+      {
+        "name": "Kinetic Energy",
+        "description": "Energy due to motion.",
+        "formula": "K = (1/2) * m * v^2"
+      },
+      {
+        "name": "Potential Energy (Gravitational)",
+        "description": "Energy due to height in a gravitational field.",
+        "formula": "U = m * g * h",
+        "constants": {"g": "9.81 m/s^2"}
+      },
+      {
+        "name": "Conservation of Mechanical Energy",
+        "description": "Total energy in a conservative system is constant.",
+        "formula": "Ki + Ui = Kf + Uf"
+      },
+      {
+        "name": "Momentum",
+        "description": "Product of mass and velocity.",
+        "formula": "p = m * v"
+      },
+      {
+        "name": "Impulse",
+        "description": "Change in momentum due to force applied over time.",
+        "formula": "J = Delta p = F * Delta t"
+      },
+      {
+        "name": "Work-Energy Theorem",
+        "description": "Work done equals change in kinetic energy.",
+        "formula": "W = Delta K = (1/2) * m * vf^2 - (1/2) * m * vi^2"
+      },
+      {
+        "name": "Centripetal Force",
+        "description": "Force keeping an object in circular motion.",
+        "formula": "Fc = m * v^2 / r"
+      }
+    ],
+    "II. Thermodynamics": [
+      {
+        "name": "First Law of Thermodynamics",
+        "description": "Conservation of energy; heat added to a system increases internal energy or does work.",
+        "formula": "Delta U = Q - W",
+        "parameters": {"Q": "Heat added", "W": "Work done by the system"}
+      },
+      {
+        "name": "Ideal Gas Law",
+        "description": "Relationship between pressure, volume, and temperature.",
+        "formula": "P * V = n * R * T",
+        "constants": {"R": "8.314 J/(mol*K)"}
+      },
+      {
+        "name": "Efficiency of a Heat Engine (Carnot Efficiency)",
+        "description": "Maximum possible efficiency for a heat engine.",
+        "formula": "eta = 1 - Tc / Th",
+        "parameters": {"Tc": "Cold reservoir temperature (K)", "Th": "Hot reservoir temperature (K)"}
+      }
+    ],
+    "III. Electromagnetism": [
+      {
+        "name": "Coulomb's Law",
+        "description": "Force between two point charges.",
+        "formula": "F = k * (|q1 * q2| / r^2)",
+        "constants": {"k": "8.9875517923e9 N*m^2/C^2"}
+      },
+      {
+        "name": "Electric Field (Point Charge)",
+        "description": "Field strength due to a point charge.",
+        "formula": "E = k * |q| / r^2"
+      },
+      {
+        "name": "Magnetic Force on a Moving Charge (Lorentz Force)",
+        "description": "Force on a charge moving in a magnetic field.",
+        "formula": "F = q * (v x B)"
+      },
+      {
+        "name": "Ohm's Law",
+        "description": "Relationship between voltage, current, and resistance.",
+        "formula": "V = I * R"
+      },
+      {
+        "name": "Faraday's Law of Induction",
+        "description": "Induced electromotive force (EMF) due to changing magnetic flux.",
+        "formula": "E = -d(Phi_B)/dt",
+        "parameters": {"Phi_B": "Magnetic flux (B * A)"}
+      }
+    ],
+    "IV. Optics": [
+      {
+        "name": "Snell's Law",
+        "description": "Refraction of light at an interface.",
+        "formula": "n1 * sin(theta1) = n2 * sin(theta2)",
+        "parameters": {"n": "Refractive index", "theta": "Angle of incidence/refraction"}
+      },
+      {
+        "name": "Lensmaker's Equation",
+        "description": "Focal length of a lens.",
+        "formula": "1/f = (n - 1) * (1/R1 - 1/R2)",
+        "parameters": {"R1, R2": "Radii of curvature of lens surfaces"}
+      }
+    ],
+    "V. Fluid Mechanics": [
+      {
+        "name": "Bernoulli's Equation",
+        "description": "Conservation of energy in fluid flow.",
+        "formula": "P + (1/2) * rho * v^2 + rho * g * h = constant",
+        "parameters": {"rho": "Fluid density"}
+      },
+      {
+        "name": "Pascal's Law",
+        "description": "Pressure applied to a fluid is transmitted equally.",
+        "formula": "P1 = P2 => F1/A1 = F2/A2"
+      }
+    ],
+    "VI. Quantum Physics": [
+      {
+        "name": "Planck-Einstein Relation",
+        "description": "Quantizes energy of electromagnetic radiation.",
+        "formula": "E = h * nu = hbar * omega",
+        "constants": {"h": "6.626e-34 J*s", "hbar": "1.055e-34 J*s", "omega": "2 * pi * nu"}
+      },
+      {
+        "name": "De Broglie Wavelength",
+        "description": "Wave-like properties of matter.",
+        "formula": "lambda = h / p",
+        "relativistic_formula": "lambda = h / sqrt(p^2 + m^2 * c^2)"
+      },
+      {
+        "name": "Heisenberg Uncertainty Principle",
+        "description": "Limits precision of complementary observables.",
+        "formulas": [
+          "Delta x * Delta p >= hbar / 2",
+          "Delta E * Delta t >= hbar / 2",
+          "Delta L * Delta t >= hbar / 2"
+        ]
+      },
+      {
+        "name": "Complementarity Principle (Bohr)",
+        "description": "Mutually exclusive classical concepts are complementary in quantum descriptions.",
+      },
+      {
+        "name": "Schrödinger Equation (Time-Dependent)",
+        "description": "Governs time evolution of quantum systems.",
+        "formula": "i * hbar * d/dt |psi> = H |psi>"
+      },
+      {
+        "name": "Schrödinger Equation (Time-Independent)",
+        "description": "For stationary states with definite energy.",
+        "formula": "H |psi> = E |psi>"
+      },
+      {
+        "name": "Probability Density (Born's Rule)",
+        "description": "Interprets wave function squared as probability.",
+        "formula": "P(r) = |psi(r)|^2",
+        "normalization": "integral(|psi|^2 d^3 r) = 1"
+      },
+      {
+        "name": "Path Integral Formulation (Feynman)",
+        "description": "Sum over histories approach to quantum mechanics.",
+        "formula": "K(x',t';x,t) = ∫Dx e^{iS[x]/hbar}"
+      },
+      {
+        "name": "Position/Momentum Operators (1D)",
+        "description": "Operators for position and momentum.",
+        "formulas": ["x_hat = x", "p_hat = -i * hbar * d/dx"]
+      },
+      {
+        "name": "Hamiltonian (Non-relativistic)",
+        "description": "Operator for total energy.",
+        "formula": "H = -(hbar^2 / 2m) * nabla^2 + V(r)"
+      },
+      {
+        "name": "Expectation Value",
+        "description": "Average measurement outcome for observable.",
+        "formula": "<O> = <psi| O |psi>",
+        "variance": "(Delta O)^2 = <O^2> - <O>^2"
+      },
+      {
+        "name": "Particle in a Box (1D)",
+        "description": "Energy levels for confined particles.",
+        "formulas": [
+          "E_n = (n^2 * pi^2 * hbar^2) / (2 * m * L^2)",
+          "psi_n(x) = sqrt(2/L) * sin(n * pi * x / L)"
+        ]
+      },
+      {
+        "name": "Quantum Harmonic Oscillator",
+        "description": "Vibrational modes in quantum systems.",
+        "formula": "E_n = hbar * omega * (n + 1/2)",
+        "ladder_operators": [
+          "a = sqrt(mω/(2ħ))(x + i/(mω)p)",
+          "a† = sqrt(mω/(2ħ))(x - i/(mω)p)"
+        ]
+      },
+      {
+        "name": "Hydrogen Atom Energy Levels",
+        "description": "Energy levels for hydrogen atom.",
+        "formula": "E_n = -13.6 eV / n^2",
+        "fine_structure": "E_{njm} = E_n[1 + α^2/n^2 (n/(j+1/2) - 3/4)]"
+      },
+      {
+        "name": "Spin Operators (Spin-1/2)",
+        "description": "Pauli matrices for spin-1/2 particles.",
+        "formulas": [
+          "S_x = (hbar/2) * [[0, 1], [1, 0]]",
+          "S_y = (hbar/2) * [[0, -i], [i, 0]]",
+          "S_z = (hbar/2) * [[1, 0], [0, -1]]"
+        ]
+      },
+      {
+        "name": "Angular Momentum Commutation",
+        "description": "Fundamental relations for angular momentum operators.",
+        "formulas": [
+          "[L_i, L_j] = iħ ε_{ijk} L_k",
+          "[S_i, S_j] = iħ ε_{ijk} S_k"
+        ]
+      },
+      {
+        "name": "Dirac Equation",
+        "description": "For spin-1/2 particles like electrons.",
+        "formula": "(i * gamma^mu * partial_mu - (m * c / hbar)) * psi = 0"
+      },
+      {
+        "name": "Klein-Gordon Equation",
+        "description": "For spin-0 relativistic particles.",
+        "formula": "(∂^μ∂_μ + (mc/ħ)^2)φ = 0"
+      },
+      {
+        "name": "Fermi-Dirac Distribution",
+        "description": "Distribution for fermions.",
+        "formula": "f(E) = 1 / (exp((E - mu)/(k_B * T)) + 1"
+      },
+      {
+        "name": "Bose-Einstein Distribution",
+        "description": "Distribution for bosons.",
+        "formula": "f(E) = 1 / (exp((E - mu)/(k_B * T)) - 1"
+      },
+      {
+        "name": "Pauli Exclusion Principle",
+        "description": "No two fermions can occupy identical quantum states.",
+      },
+      {
+        "name": "Qubit State",
+        "description": "General state of a qubit.",
+        "formula": "|psi> = alpha |0> + beta |1>, |alpha|^2 + |beta|^2 = 1",
+        "bloch_sphere": "Parametrized by θ, φ"
+      },
+      {
+        "name": "Bell State (Maximally Entangled)",
+        "description": "Entangled state for two qubits.",
+        "formula": "|Phi^+> = (1/sqrt(2)) * (|00> + |11>)"
+      },
+      {
+        "name": "Von Neumann Entropy",
+        "description": "Measures quantum information entropy.",
+        "formula": "S(ρ) = -Tr(ρ ln ρ)"
+      },
+      {
+        "name": "Quantum Fourier Transform",
+        "description": "Core component of Shor's algorithm.",
+        "formula": "QFT |x> = (1/√N) Σ_y e^{2πi x y / N} |y>"
+      },
+      {
+        "name": "Scalar Field Lagrangian (QFT)",
+        "description": "Lagrangian for scalar quantum fields.",
+        "formula": "L = 1/2 ∂_μϕ∂^μϕ - 1/2 m^2 ϕ^2"
+      },
+      {
+        "name": "Standard Model Symmetry",
+        "description": "Gauge group of particle physics.",
+        "formula": "SU(3)_C × SU(2)_L × U(1)_Y"
+      },
+      {
+        "name": "Higgs Mechanism",
+        "description": "Mass generation via spontaneous symmetry breaking.",
+        "formula": "V(Φ) = μ^2 Φ^†Φ + λ(Φ^†Φ)^2"
+      },
+      {
+        "name": "Hubbard Model",
+        "description": "For strongly correlated electrons.",
+        "formula": "H = -t Σ_{<ij>σ} (c_{iσ}†c_{jσ} + h.c.) + U Σ_i n_{i↑}n_{i↓}"
+      },
+      {
+        "name": "Topological Insulators",
+        "description": "Materials with protected surface states.",
+        "chern_number": "C = (1/2π) ∫_{BZ} F(k) dk"
+      },
+      {
+        "name": "Loop Quantum Gravity",
+        "description": "Quantum theory of spacetime geometry.",
+        "area_quantization": "A = 8πγℓ_P^2 √(j(j+1))"
+      },
+      {
+        "name": "Quantum Coherence in Photosynthesis",
+        "description": "Quantum effects in biological energy transfer.",
+      },
+      {
+        "name": "Recent Breakthroughs (2024-2025)",
+        "description": "Key advancements in quantum physics",
+        "discoveries": [
+          "Abrupt quantum phase transitions in 3-atom-thin insulators",
+          "Quantum spin currents in graphene without magnetic fields",
+          "Measurement-induced entanglement transitions",
+          "Quantum-gravity interface experiments",
+          "Cellular quantum computation via vibronic coupling"
+        ]
+      }
+    ],
+    "VII. Key Constants": [
+      {
+        "name": "Planck's constant (h)",
+        "value": "6.626e-34 J·s"
+      },
+      {
+        "name": "Reduced Planck's constant (ħ)",
+        "value": "1.055e-34 J·s"
+      },
+      {
+        "name": "Bohr radius (a₀)",
+        "value": "5.29e-11 m"
+      },
+      {
+        "name": "Rydberg energy",
+        "value": "13.6 eV"
+      },
+      {
+        "name": "Fine-structure constant (α)",
+        "value": "≈ 1/137"
+      },
+      {
+        "name": "Planck length (ℓ_P)",
+        "value": "1.62e-35 m"
+      },
+      {
+        "name": "Electron mass (m_e)",
+        "value": "9.109e-31 kg"
+      },
+      {
+        "name": "Speed of light (c)",
+        "value": "2.998e8 m/s"
+      }
+    ]
+  }
+}
