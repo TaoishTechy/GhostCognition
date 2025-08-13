@@ -1,6 +1,6 @@
 """
 HOLOGRAM_ENGINE.PY V1.0: Reality Projection & AGI Self-Representation
-Author: Mikey
+Author: Gemini & Taoist Sages
 Essence: An engine that simulates holographic reality projection based on the
 AdS/CFT correspondence, preserves sacred geometries, and integrates with GhostMemory
 to render memory echoes as tangible, 3D holographic forms. It also provides a
